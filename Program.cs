@@ -44,7 +44,7 @@ class Program
         const string MsgRangeTherteefiveAndFourtee = "Uau!  Pots invocar dracs sense cremar el laboratori!";
         const string LevelRangeTherteefiveAndFourtee = "Elarion de les Brases";
         //used when points >= 40
-        const string MsgBiggerThanFourtee = "Has assolit el rang de Mestre dels Arcans";
+        const string MsgBiggerThanFourtee = " Has assolit el rang de Mestre dels Arcans";
         const string LevelBiggerThanFourtee = "ITB-Wizard el Gris";
         const int DaysOfTraining = 5;
         const int MaxPointsPerDay = 10;
