@@ -44,12 +44,26 @@ class Program
         const string MsgRangeTherteefiveAndFourtee = "Uau!  Pots invocar dracs sense cremar el laboratori!";
         const string LevelRangeTherteefiveAndFourtee = "Elarion de les Brases";
         //used when points >= 40
-        const string MsgBiggerThanFourtee = " Has assolit el rang de Mestre dels Arcans";
+        const string MsgBiggerThanFourtee = "Has assolit el rang de Mestre dels Arcans";
         const string LevelBiggerThanFourtee = "ITB-Wizard el Gris";
         const int DaysOfTraining = 5;
         const int MaxPointsPerDay = 10;
         const int MinPointsPerDay = 1;
         const int MaxHouersOfTrainingPerDay = 24;
+
+        //chapter two consts
+        const string MsgDragonDors = """
+            Per entrar al Calabós del Drac RAMón el Poderós hauras de passar per {0} portes.
+            Cada porta té un codi numeric entre 1 i 5. Tens {1} intents per obrir cada porta.
+            """;
+        const string DorAndTrie = """
+
+            Porta {0} : Intent {1}
+            Enter the code: 
+            """;
+        const string FailOpeningDor = "El drac ha detectat la teva presència i t’ha expulsat del servidor!";
+        const string SuccedOpeningDor = "El drac et respecta. Has desbloquejat el següent nivell!";
+        const string AllDorsPassed = "Has desbloquejat el nivell final. Prepara’t per la batalla!";
 
         Random random = new Random();
         string wizardName;
@@ -57,7 +71,12 @@ class Program
         int op = 0;
         int wizardPoints;
         int trainedHouers;
+        int dorsNumber = 3;
+        int triesPerDor = 3;
+        int dorCode; //the dor code
+        int readDorCode; //the code that the user introduce
         bool validInput;
+        bool validDorCode = true; //initialized to solve an error
 
         do
         {
@@ -137,10 +156,43 @@ class Program
                         Console.WriteLine(MsgLessThanTwentee);
                     }
                     Console.WriteLine(WizardLevelInfo, wizardName, wizardLevel);
-                    Console.WriteLine(PresToContinue);
-                    Console.ReadKey();
                     break;
                 case 2:
+                    Console.WriteLine(MsgDragonDors, dorsNumber, triesPerDor);
+
+                    for (int i = 0; i < dorsNumber; i++)
+                    {
+                        dorCode = random.Next(1, 6);
+                        for (int j = 0; j < triesPerDor; j++)
+                        {
+                            do
+                            {
+                                Console.WriteLine(DorAndTrie, i + 1, j + 1);
+                                validInput = Int32.TryParse(Console.ReadLine(), out readDorCode);
+                            } while (!validInput);
+
+                            if (dorCode == readDorCode)
+                            {
+                                j = triesPerDor;
+                                validDorCode = true;
+                            }
+                            else
+                            {
+                                validDorCode = false;
+                            }
+                        }
+                        if (validDorCode)
+                        {
+                            Console.WriteLine(SuccedOpeningDor);
+                        }
+                        else
+                        {
+                            i = dorsNumber;
+                            Console.WriteLine(FailOpeningDor);
+                        }
+                    }
+                    if (validDorCode) Console.WriteLine(AllDorsPassed);
+
                     break;
                 case 3:
                     break;
@@ -148,6 +200,8 @@ class Program
                     Console.WriteLine(MsgGoodBye);
                     break;
             }
+            Console.WriteLine(PresToContinue);
+            Console.ReadKey();
 
 
         } while (op != 0);
