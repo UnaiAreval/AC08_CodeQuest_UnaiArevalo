@@ -65,6 +65,28 @@ class Program
         const string SuccedOpeningDor = "El drac et respecta. Has desbloquejat el següent nivell!";
         const string AllDorsPassed = "Has desbloquejat el nivell final. Prepara’t per la batalla!";
 
+        //chapter three consts
+        const string MsgEnterMine = """
+            Despres de derrotar al drac has trobat una mina de bitcoins.
+            Podras dur a terme {0} excavasions per tal d'aconseguir riqueses, però potser que no trobis res.
+            """;
+        const string NoBitsFound = "EXCAVACIO {0} - No has tingut sort, has trobat 0 bits.";
+        const string BitsFound = "EXCAVACIO {0} - Has aconseguit {1} bits";
+        const string SmollTotalBits = """
+
+            Havent acabat les excavasions el teu total de bits és de {0}.
+            La teva targeta màgia encara és integrada. Toca derrotar a un altre drac!
+            """; //if you have less than the minimum bits
+        const string CorrectTotalBits = """
+            
+            Havent acabat les excavasions el teu total de bits és de {0}.
+            Has desbloquejat la GPU d’or! Els teus encanteris van ara a 120 FPS!
+            """;
+        const int ExcavationsNum = 5;
+        const int MinBitsFound = 5;
+        const int MaxBitsFound = 50;//the min and the max value of bits you can find in an excavation
+        const int MinCorrectBits = 200; //you should have this amount of total bits at the end of the chapter
+
         Random random = new Random();
         string wizardName;
         string wizardLevel;
@@ -75,6 +97,9 @@ class Program
         int triesPerDor = 3;
         int dorCode; //the dor code
         int readDorCode; //the code that the user introduce
+        int totalBits;
+        int bitsFound;
+        int foundBits; //if 0 then you don't find bits, if =1 then you find bits. Used with a random to change its value in each excavation.
         bool validInput;
         bool validDorCode = true; //initialized to solve an error
 
@@ -195,6 +220,33 @@ class Program
 
                     break;
                 case 3:
+                    Console.WriteLine(MsgEnterMine, ExcavationsNum);
+                    totalBits = 0;
+                    Thread.Sleep(1000);
+
+                    for (int i = 0; i < ExcavationsNum; i++)
+                    {
+                        foundBits = random.Next(0, 2); //0 or 1
+                        if (foundBits == 1)
+                        {
+                            bitsFound = random.Next(MinBitsFound, MaxBitsFound + 1);
+                            Console.WriteLine(BitsFound, i + 1, bitsFound);
+                            totalBits += bitsFound;
+                        }
+                        else
+                        {
+                            Console.WriteLine(NoBitsFound, i + 1);
+                        }
+                        Thread.Sleep(1000);
+                    }
+                    if (totalBits >= MinCorrectBits)
+                    {
+                        Console.WriteLine(CorrectTotalBits, totalBits);
+                    }
+                    else
+                    {
+                        Console.WriteLine(SmollTotalBits, totalBits);
+                    }
                     break;
                 case 0:
                     Console.WriteLine(MsgGoodBye);
